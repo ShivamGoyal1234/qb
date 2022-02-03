@@ -6,7 +6,7 @@ Config.Delays = {
 	MakeStew = 1000 * 1
 }
 
-Config.Pricesell = 200
+Config.Pricesell = 50
 
 Config.MinPiecesWed = 1
 

@@ -21,7 +21,7 @@ AddEventHandler('qb-mushroomjob:MakeStew', function()
 	if Player.Functions.GetItemByName('mushroom') then
 		local chance = math.random(1, 8)
 		if chance == 1 or chance == 2 or chance == 3 or chance == 4 or chance == 5 or chance == 6 or chance == 7 or chance == 8 then
-			Player.Functions.RemoveItem('mushroom', 2)----change this
+			Player.Functions.RemoveItem('mushroom', 1)----change this
 			Player.Functions.AddItem('mushroom_stew', 1)----change this
 			TriggerClientEvent("inventory:client:ItemBox", source, QBCore.Shared.Items['mushroom'], "remove")
 			TriggerClientEvent("inventory:client:ItemBox", source, QBCore.Shared.Items['mushroom_stew'], "add")

@@ -8,6 +8,13 @@ QBCore.Functions.CreateUseableItem("vodka", function(source, item)
     TriggerClientEvent("consumables:client:DrinkAlcohol", src, item.name)
 end)
 
+QBCore.Functions.CreateUseableItem("joint", function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("consumables:client:UseJoint", source)
+    end
+end)
+
 QBCore.Functions.CreateUseableItem("beer", function(source, item)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
@@ -77,6 +84,15 @@ QBCore.Functions.CreateUseableItem("kurkakola", function(source, item)
     local Player = QBCore.Functions.GetPlayer(src)
 	if Player.Functions.RemoveItem(item.name, 1, item.slot) then
         TriggerClientEvent("consumables:client:Drink", src, item.name)
+    end
+end)
+
+---------/ ifak 
+
+QBCore.Functions.CreateUseableItem("ifak", function(source, item)
+    local Player = QBCore.Functions.GetPlayer(source)
+	if Player.Functions.RemoveItem(item.name, 1, item.slot) then
+        TriggerClientEvent("consumables:client:Useifak", source, item.name)
     end
 end)
 

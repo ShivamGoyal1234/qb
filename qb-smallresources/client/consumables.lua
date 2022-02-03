@@ -85,24 +85,24 @@ function EcstasyEffect()
 end
 
 function JointEffect()
-    -- if not onWeed then
-    --     local RelieveOdd = math.random(35, 45)
-    --     onWeed = true
-    --     local weedTime = Config.JointEffectTime
-    --     CreateThread(function()
-    --         while onWeed do
-    --             SetPlayerHealthRechargeMultiplier(PlayerId(), 1.8)
-    --             Wait(1000)
-    --             weedTime = weedTime - 1
-    --             if weedTime == RelieveOdd then
-    --                 TriggerServerEvent('hud:Server:RelieveStress', math.random(14, 18))
-    --             end
-    --             if weedTime <= 0 then
-    --                 onWeed = false
-    --             end
-    --         end
-    --     end)
-    -- end
+    if not onWeed then
+        local RelieveOdd = math.random(35, 45)
+        onWeed = true
+        local weedTime = Config.JointEffectTime
+        CreateThread(function()
+            while onWeed do
+                SetPlayerHealthRechargeMultiplier(PlayerId(), 1.8)
+                Wait(1000)
+                weedTime = weedTime - 1
+                if weedTime == RelieveOdd then
+                    TriggerServerEvent('hud:Server:RelieveStress', math.random(14, 18))
+                end
+                if weedTime <= 0 then
+                    onWeed = false
+                end
+            end
+        end)
+    end
 end
 
 function CrackBaggyEffect()
@@ -196,20 +196,6 @@ end
 
 -- Events
 
-RegisterNetEvent("consumables:client:Oxy")
-AddEventHandler("consumables:client:Oxy", function(itemName)
-    TriggerEvent('animations:client:EmoteCommandStart', {"drink"})
-    QBCore.Functions.Progressbar("drink_something", "Down the pills..", 2500, false, true, {
-        disableMovement = false,
-        disableCarMovement = false,
-		disableMouse = false,
-		disableCombat = true,
-    }, {}, {}, {}, function() -- Done
-        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items[itemName], "remove")
-        TriggerEvent('animations:client:EmoteCommandStart', {"c"})
-        OxyEffect()
-    end)
-end)
 
 function OxyEffect()
     if not onOxy then
@@ -232,12 +218,6 @@ function OxyEffect()
     end
 end
 
-QBCore.Functions.CreateUseableItem("oxy", function(source, item)
-    local Player = QBCore.Functions.GetPlayer(source)
-	if Player.Functions.RemoveItem(item.name, 1, item.slot) then
-        TriggerClientEvent("consumables:client:Oxy", source)
-    end
-end)
 
 RegisterNetEvent('consumables:client:Eat', function(itemName)
     TriggerEvent('animations:client:EmoteCommandStart', {"eat"})
@@ -251,6 +231,30 @@ RegisterNetEvent('consumables:client:Eat', function(itemName)
         TriggerEvent('animations:client:EmoteCommandStart', {"c"})
         TriggerServerEvent("QBCore:Server:SetMetaData", "hunger", QBCore.Functions.GetPlayerData().metadata["hunger"] + ConsumeablesEat[itemName])
         TriggerServerEvent('hud:server:RelieveStress', math.random(2, 4))
+    end)
+end)
+
+RegisterNetEvent("consumables:client:Useifak")
+AddEventHandler("consumables:client:Useifak", function()
+    QBCore.Functions.Progressbar("use_bandage", "Taking I-FAK", 3000, false, true, {
+        disableMovement = false,
+        disableCarMovement = false,
+		disableMouse = false,
+		disableCombat = true,
+    }, {
+		animDict = "mp_suicide",
+		anim = "pill",
+		flags = 49,
+    }, {}, {}, function() -- Done
+        StopAnimTask(GetPlayerPed(-1), "mp_suicide", "pill", 1.0)
+        TriggerServerEvent("QBCore:Server:RemoveItem", "ifak", 1)
+        TriggerEvent("inventory:client:ItemBox", QBCore.Shared.Items["ifak"], "remove")
+        TriggerEvent("hospital:client:HealInjuries", source ,"full")
+        TriggerServerEvent('qb-hud:Server:RelieveStress', math.random(10, 20))
+        TriggerServerEvent("hospital:client:TreatWounds", source)
+    end, function() -- Cancel
+        StopAnimTask(GetPlayerPed(-1), "mp_suicide", "pill", 1.0)
+        QBCore.Functions.Notify("Fail", "error")
     end)
 end)
 

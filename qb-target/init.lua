@@ -69,8 +69,7 @@ Config.TargetEntities = {
 }
 
 Config.TargetModels = {
-
-
+	
 	["atm"] = {
 		models = {
 			`prop_atm_01`,
@@ -589,4 +588,3 @@ function CheckOptions(data, entity, distance)
 	if data.canInteract and not data.canInteract(entity, distance, data) then return false end
 	return true
 end
-
